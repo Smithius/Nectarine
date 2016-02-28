@@ -1,0 +1,18 @@
+{% extends './base.html.twig' %}
+
+{% block title %} Strna blog {{ parent() }}{% endblock %}
+
+
+{% block content %}
+	<div class="col-lg-12">
+		<h4>blog.html</h4>
+		<div class="alert alert-info" role="alert">Aby przesłać parametr metoda URI, dopisz w adresie "/{dowolny ciąg}"</div>
+
+		{% if id is not null %}
+		<div class="jumbotron">
+			<h1>Parametr przekazany!</h1>
+			<p>Wpisałeś: {{ id }}</p>
+		</div>
+		{% endif %}
+	</div>
+{% endblock %}
