@@ -203,11 +203,11 @@ final class App
             exit(1);
         });
 
-        try {
-            $this->di->set('CliSetup');
-        } catch (Exception $e) {
-            echo "Misssing Cli setup file";
-        }
+        $cliCallback = Conf::get('nc.cli.callback');
+        if ($cliCallback)
+            $this->di->make($cliCallback);
+        else
+            echo "Undefined config variable: 'nc.cli.callback' \n";
     }
 
     /**
