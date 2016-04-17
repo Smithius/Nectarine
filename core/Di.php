@@ -29,13 +29,20 @@ class Di
      * @param mixed $parameters
      * @return object
      */
-    public function get($name, $parameters = null)
+    public function get($name, $parameters = array())
     {
         $name = trim($name, '\\');
         $obj = $this->container->get($name, $parameters);
         return $obj ?: $this->_set($name, $parameters, null, Container::TRY_CACHE);
     }
 
+    /**
+     * @param string $className
+     * @param array $parameters
+     * @param null $alias
+     * @return object|void
+     * @throws Exception
+     */
     public function set($className, $parameters = array(), $alias = null)
     {
         return $this->_set($className, $parameters, $alias, Container::CACHE);
@@ -103,22 +110,26 @@ class Di
      */
     protected function args($reflectionMethod, $args)
     {
-        $definiton = $this->definitionSource->getDefinition($reflectionMethod->class);
-        $definiton = $definiton['methods'][$reflectionMethod->name]['parameters'];
+        $definiton = false;
 
         $r = [];
         foreach ($reflectionMethod->getParameters() as $parameter) {
             if (array_key_exists($parameter->name, $args))
                 $r[] = $args[$parameter->name];
             elseif ($class = $parameter->getClass()) {
-                //var_dump($class);
-            } elseif ($definiton && isset($definiton[$parameter->name]['type'])) {
-                $r[] = $this->get($definiton[$parameter->name]['type']);
-            } else
-                $r[] = $this->get($parameter->name);
+                $r[] = $this->get($class);
+            } else {
+                if (!$definiton)
+                    $definiton = $this->definitionSource->getDefinition($reflectionMethod->class)['methods'][$reflectionMethod->name]['parameters'];
+
+                if ($definiton && isset($definiton[$parameter->name]['type'])) {
+                    $r[] = $this->get($definiton[$parameter->name]['type']);
+                } else
+                    $r[] = $this->get($parameter->name);
 
 //            if ($param->isDefaultValueAvailable())
 //                $r[] = $param->getDefaultValue();
+            }
         }
 
         return $r;
