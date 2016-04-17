@@ -1,10 +1,11 @@
 <?php
 
-class Error403 extends Exception {
+class Error403 extends Exception
+{
 
-	function view() {
-		$template = Di::get('Template');
-		$template->render(new Core\Response(array(), 'error403'));
-	}
-
+    /**
+     * @var int
+     */
+    public $status = 403;
+    
 }

@@ -1,12 +1,14 @@
 {
-    "name": "NC",
-    "description": "Praca Inz",
-	"config": {
-		"vendor-dir": "core/vendor"
-	},
-    "minimum-stability": "stable",
-    "require": {
-		"twig/twig":"~1.0",
-		"doctrine/orm": "2.4.*"
-	}
+  "name": "Nectarine Framework",
+  "config": {
+    "vendor-dir": "core/vendor"
+  },
+  "minimum-stability": "stable",
+  "require": {
+    "twig/twig": "~1.0",
+    "phpdocumentor/reflection-docblock": "~2.0",
+    "doctrine/annotations": "~1.0",
+    "doctrine/cache": "~1.4",
+    "doctrine/orm": "2.5.*"
+  }
 }

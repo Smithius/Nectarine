@@ -1,10 +1,11 @@
 <?php
 
-define('ABSPATH', dirname(__FILE__) . '/');
-define('CORE', ABSPATH . 'core/');
+define('ABSPATH', __DIR__);
+define('CORE', ABSPATH . '/core');
 
-if (file_exists(ABSPATH . 'config.php')) {
-	require CORE . 'Kernel.php';
-	Kernel::init();
+if (file_exists(ABSPATH . '/config.php')) {
+	require CORE . '/App.php';
+	$app = App::instance();
+	$app->execute();
 } else
 	die("ERROR (Invalid config path)");

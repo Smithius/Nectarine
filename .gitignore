@@ -1,6 +1,5 @@
 core/cache/
 core/vendor/
-core/.gitignore
-core/composer.json
-files/*
+files/
+.idea/
 local.php

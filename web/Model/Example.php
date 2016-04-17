@@ -2,8 +2,6 @@
 
 namespace Model;
 
-use Doctrine\Common\Collections\ArrayCollection as Collection;
-
 /**
  * @Entity
  */
@@ -17,9 +15,8 @@ class Example {
 	protected $id;
 
 	/**
-	 * 1 - obecny, 2 - nieobecny, ...
-	 * @Column(type="integer", nullable=false) 
+	 * @Column(type="integer")
 	 */
-	protected $presence;
+	protected $number;
 
 }

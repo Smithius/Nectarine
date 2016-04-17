@@ -1,109 +1,170 @@
 <?php
 
-class Di {
+use Di\Container;
 
-	/**
-	 * Di container
-	 * @var array 
-	 */
-	private static $container = array();
+class Di
+{
 
-	/**
-	 * Mapped Class
-	 * @var array 
-	 */
-	private static $map = array();
+    /**
+     * @var \Di\Container
+     */
+    protected $container;
 
-	/**
-	 * File path to mapped class 
-	 * @var array 
-	 */
-	private static $path = array();
+    /**
+     * @var \Di\DefinitionSource
+     */
+    protected $definitionSource;
 
-	public static function get($name, $ifNull = null) {
-		return array_key_exists($name, self::$container) ? self::$container[$name] : $ifNull;
-	}
+    public function __construct($source)
+    {
+        $this->definitionSource = $source;
+        $this->container = new Container();
+        $this->set($this, 'di');
+    }
 
-	public static function set($className, $name = false, $withPath = false) {
-		if (is_object($className)) {
-			if (!$name)
-				$name = get_class($className);
+    /**
+     * Return object, if not exist, create it.
+     *
+     * @param string $name
+     * @param mixed $parameters
+     * @return object
+     */
+    public function get($name, $parameters = null)
+    {
+        $name = trim($name, '\\');
+        $obj = $this->container->get($name, $parameters);
+        return $obj ?: $this->_set($name, $parameters, null, Container::TRY_CACHE);
+    }
 
-			return self::$container[$name] = $className;
-		} elseif (!class_exists($className)) {
-			throw new Exception("Di: missing class: '" . $className . "'.");
-		}
+    public function set($className, $parameters = array(), $alias = null)
+    {
+        return $this->_set($className, $parameters, $alias, Container::CACHE);
+    }
 
-		if (!$name)
-			$name = basename(str_replace('\\', '/', $className));
+    /**
+     * No cachable class
+     */
+    public function make($className, $parameters = array())
+    {
+        return $this->_set($className, $parameters, null, Container::NO_CACHE);
+    }
 
-		if (isset(self::$map[$name])) {
-			$arguments = array();
-			$reflection = new ReflectionClass($className);
-			if (isset(self::$map[$name]['__construct'])) {
-				foreach (self::$map[$name]['__construct']['parameters'] as $parameter) {
-					$injected = Di::get($parameter['name']);
-					$arguments[$parameter['name']] = $injected ? $injected : Di::set($parameter['name']);
-				}
-			}
+    /**
+     * @param $className
+     * @param $parameters
+     * @param $alias
+     * @param $cacheable
+     * @return object|void
+     * @throws Exception
+     */
+    protected function _set($className, $parameters, $alias, $cacheable)
+    {
+        if (is_object($className)) {
+            if ($cacheable) {
+                if (is_string($parameters))
+                    $alias = $parameters;
 
-			$class = $reflection->newInstanceArgs($arguments);
-		} else
-			$class = new $className;
+                $this->container->set($className, $parameters, $alias);
+            }
+            return $className;
+        } elseif (!class_exists($className)) {
+            throw new Exception("Di: missing class: '" . $className . "'.");
+        }
 
-		return self::$container[$name] = $class;
-	}
+        $obj = $this->resolve($className, $parameters, $cacheable);
+        // if alias bind value
 
-	public static function mapClass($name) {
-		if (!class_exists($name)) {
-			throw new Exception("DI: map missing class '" . $name . "'.");
-		}
+        return $obj;
+    }
 
-		$className = basename(str_replace('\\', '/', $name));
-		$reflection = new ReflectionClass($name);
-		foreach ($reflection->getMethods() as $method) {
-			self::$map[$className][$method->name]['parameters'] = array();
+    /**
+     * Call calable
+     * @param $class
+     * @param $method
+     * @param array $parameters
+     * @return mixed
+     */
+    public function call($class, $method, $parameters = array())
+    {
+        if (!is_object($class)) {
+            $class = $this->resolve($class);
+        }
 
-			foreach ($method->getParameters() as $parameter) {
-				self::$map[$className][$method->name]['parameters'][$parameter->getName()] = array('name' => $parameter->getName());
-				if ($parameter->isOptional())
-					self::$map[$className][$method->name]['parameters'][$parameter->getName()] += array('default' => $parameter->getDefaultValue());
-			}
+        $ref = new ReflectionMethod($class, $method);
+        $args = $this->args($ref, $parameters);
+        return $ref->invokeArgs($class, $args);
+    }
 
-			if ($doc = $method->getDocComment()) {
-				preg_match('#@Route\("?/?(([^"]*))"?\)#', $doc, $match);
-				if (isset($match[1]))
-					self::$map[$className][$method->name]['route'] = $match[1];
-			}
-		}
+    /**
+     * Resolve ars
+     * @param \ReflectionMethod $reflectionMethod
+     * @param array $args
+     * @return array
+     */
+    protected function args($reflectionMethod, $args)
+    {
+        $definiton = $this->definitionSource->getDefinition($reflectionMethod->class);
+        $definiton = $definiton['methods'][$reflectionMethod->name]['parameters'];
 
-		self::$path[$className] = $reflection->getFileName();
-	}
+        $r = [];
+        foreach ($reflectionMethod->getParameters() as $parameter) {
+            if (array_key_exists($parameter->name, $args))
+                $r[] = $args[$parameter->name];
+            elseif ($class = $parameter->getClass()) {
+                //var_dump($class);
+            } elseif ($definiton && isset($definiton[$parameter->name]['type'])) {
+                $r[] = $this->get($definiton[$parameter->name]['type']);
+            } else
+                $r[] = $this->get($parameter->name);
 
-	public static function getMap($class = false) {
-		if ($class)
-			return self::$map[$class];
-		return self::$map;
-	}
+//            if ($param->isDefaultValueAvailable())
+//                $r[] = $param->getDefaultValue();
+        }
 
-	public static function getPath($class) {
-		if (isset(self::$path[$class]))
-			return self::$path[$class];
-		return false;
-	}
+        return $r;
+    }
 
-	public static function init() {
-		foreach (glob(WEB . 'Controller/*.php') as $class) {
-			self::mapClass('Controller\\' . basename($class, '.php'));
-		}
+    /**
+     * Get tagged targets
+     * @param $tag tag name
+     * @return array of matching targets
+     */
+    public function getTag($tag)
+    {
+        return $this->definitionSource->getTag($tag);
+    }
 
-		foreach (Kernel::modules() as $module) {
-			$controllers = glob($module . '/Controller/*.php');
-			if (count($controllers))
-				foreach ($controllers as $mod) {
-					self::mapClass('Controller\\' . basename($mod, '.php'));
-				}
-		}
-	}
+    /**
+     * resolve object
+     * @param $className
+     * @param array $parameters
+     * @param bool $cacheable
+     * @return object
+     */
+    protected function resolve($className, $parameters = array(), $cacheable = false)
+    {
+        $definiton = $this->definitionSource->getDefinition($className);
+
+        $ref = new ReflectionClass($className);
+        $inst = $ref->newInstanceWithoutConstructor();
+
+        if (isset($definiton['properties'])) {
+            foreach ($definiton['properties'] as $name => $property) {
+                $prop = $ref->getProperty($name);
+                $prop->setAccessible(true);
+
+                // create proxy
+                $prop->setValue($inst, $this->get($property->getName()));
+            }
+        }
+
+        $constructor = $ref->getConstructor();
+        if (!is_null($constructor)) {
+            $this->call($inst, $constructor->name, $parameters);
+        }
+
+        return $inst;
+    }
+
 
 }

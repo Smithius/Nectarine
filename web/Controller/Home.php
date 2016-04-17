@@ -5,7 +5,7 @@ namespace Controller;
 class Home {
 
 	/**
-	 * @Route()
+	 * @Route
 	 */
 	public function index() {
 		return array();
@@ -13,6 +13,7 @@ class Home {
 
 	/**
 	 * @Route("blog/{id}")
+	 * @param string $id
 	 */
 	public function blog($id = null) {
 		return array(
