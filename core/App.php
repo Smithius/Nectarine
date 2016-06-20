@@ -61,8 +61,7 @@ final class App
         $errors = new Errors($this->di);
         $errors->register();
 
-        //TODO session class
-        session_start();
+        new Session($this->di);
         ob_start();
 
         new TwigWrapper($this->di);
@@ -113,10 +112,7 @@ final class App
         ini_set('short_open_tag', 1);
         ini_set('magic_quotes_gpc', 0);
         ini_set('display_errors', DEBUG);
-        ini_set('error_reporting', 1);
-        if (!DEBUG) {
-            ini_set('error_reporting', -1);
-        }
+        ini_set('error_reporting', DEBUG ? -1 : 0);
     }
 
     /**
@@ -187,8 +183,6 @@ final class App
         $this->di->get('template')->render($responseHandler);
 
         $responseHandler->sendResponse();
-        //TODO Cookie class update
-        //Cookie::destruct();
     }
 
     /**
@@ -225,5 +219,4 @@ final class App
     {
         return abs(self::$time - microtime(true));
     }
-
 }

@@ -2,7 +2,6 @@
 
 abstract class Http
 {
-
     const HEADER_ETAG = 'Etag';
     const HEADER_STATUS = 'Status';
     const HEADER_CONTENTLENGTH = 'Content-Length';
@@ -78,5 +77,4 @@ abstract class Http
         }
         return true;
     }
-
 }

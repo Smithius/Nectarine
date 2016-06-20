@@ -98,7 +98,7 @@ class Template
         $modulesPaths = $this->twig->getLoader()->getPaths();
 
         foreach ($modulesPaths as $modulePath) {
-            $file = realpath($modulePath . '/' . $path);
+            $file = realpath($modulePath . '/assets/' . $path);
             if (is_file($file))
                 return $this->router->getUrl(str_replace(ABSPATH, '', $file));
         }
