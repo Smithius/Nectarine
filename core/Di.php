@@ -67,21 +67,25 @@ class Di
     protected function _set($className, $parameters, $alias, $cacheable)
     {
         if (is_object($className)) {
-            if ($cacheable) {
-                if (is_string($parameters))
-                    $alias = $parameters;
-
-                $this->container->set($className, $parameters, $alias);
+            $object = $className;
+            $className = get_class($object);
+        } else {
+            if (!class_exists($className)) {
+                throw new Exception("Di: missing class: '" . $className . "'.");
             }
-            return $className;
-        } elseif (!class_exists($className)) {
-            throw new Exception("Di: missing class: '" . $className . "'.");
+            $object = $this->resolve($className, $parameters, $cacheable);
         }
 
-        $obj = $this->resolve($className, $parameters, $cacheable);
-        // if alias bind value
+        if ($cacheable) {
+            if (is_string($parameters)) {
+                $alias = $parameters;
+                $parameters = array();
+            }
 
-        return $obj;
+            $this->container->set($object, $parameters, $alias);
+        }
+
+        return $object;
     }
 
     /**
