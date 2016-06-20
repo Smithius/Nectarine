@@ -2,6 +2,9 @@
 
 use Doctrine\ORM\Tools\Setup;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Cache\ArrayCache;
+use Doctrine\Common\Annotations\CachedReader;
+use Doctrine\Common\Annotations\SimpleAnnotationReader;
 
 /**
  * @Boot(order="1")
@@ -15,9 +18,6 @@ class DoctrineInit
      */
     private $di;
 
-    /**
-     * Home constructor.
-     */
     public function __construct()
     {
         $this->createEntityManager();
@@ -35,9 +35,17 @@ class DoctrineInit
         );
 
         $paths = App::modules("Model");
-        $config = Setup::createAnnotationMetadataConfiguration($paths, DEBUG);
+
+        $config = Setup::createConfiguration((bool)DEBUG, null, null);
+        $reader = new SimpleAnnotationReader();
+        $reader->addNamespace('Doctrine\ORM\Mapping');
+        $cachedReader = new CachedReader($reader, new ArrayCache());
+        $annotationDriver = new DoctrineAnnotationDriver($cachedReader, (array)$paths);
+
+        $config->setMetadataDriverImpl($annotationDriver);
+
         $entityManager = EntityManager::create($conn, $config);
-        $this->di->set($entityManager, array(), 'em');
+        $this->di->set($entityManager, 'em');
     }
 
     private function addResolverExtension()
