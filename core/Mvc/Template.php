@@ -10,11 +10,14 @@ use Mvc\ResponseHandler;
 
 class Template
 {
-
-    /** @var string */
+    /**
+     * @var string
+     */
     private $template;
 
-    /** @var \Mvc\Router */
+    /**
+     * @var \Mvc\Router
+     */
     private $router;
 
     /**
@@ -23,7 +26,6 @@ class Template
     protected $twig;
 
     /**
-     * Template constructor.
      * @param \Di $di
      */
     public function __construct($di)
@@ -53,15 +55,10 @@ class Template
     }
 
     /**
-     * @param \Mvc\ResponseHandler|NULL $responseHandler
+     * @param \Mvc\ResponseHandler|null $responseHandler
      */
-    public function render(ResponseHandler $responseHandler = NULL)
+    public function render(ResponseHandler $responseHandler = null)
     {
-        $debug = ob_get_clean();
-        if ($debug && DEBUG) {
-            echo('<pre class="debug_dump">' . $debug . '</pre>');
-        }
-
         $response = $responseHandler->getResponse();
         if ($response instanceof Response) {
             $route = $responseHandler->getRoute();
@@ -72,6 +69,7 @@ class Template
 
     /**
      * Twig url function
+     *
      * @param $route
      * @param array $args
      * @param bool $escaped
@@ -90,6 +88,7 @@ class Template
 
     /**
      * Twig asset function
+     *
      * @param $path
      * @return bool|string
      */
@@ -105,5 +104,4 @@ class Template
 
         return false;
     }
-
 }

@@ -9,7 +9,6 @@ use Doctrine\ORM\Tools\SchemaTool;
 
 class Doctrine
 {
-
     /**
      * @Inject
      * @var \Doctrine\ORM\EntityManager

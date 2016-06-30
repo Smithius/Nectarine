@@ -19,7 +19,7 @@ final class App
     private $di;
 
     /**
-     * @var float Start script time
+     * @var float script start time
      */
     private $runTime;
 
@@ -42,6 +42,7 @@ final class App
 
     /**
      * Startup point
+     *
      * @throws Exception
      */
     public function execute()
@@ -117,6 +118,7 @@ final class App
 
     /**
      * Return all modules paths, include web folder
+     *
      * @param string $subdirectory
      * @return array
      */

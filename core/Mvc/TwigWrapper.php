@@ -11,7 +11,6 @@ use Twig_ExtensionInterface;
 
 class TwigWrapper
 {
-
     /**
      * @var array
      */
@@ -38,7 +37,6 @@ class TwigWrapper
     protected $_twig;
 
     /**
-     * TwigWrapper constructor.
      * @param \Di $di
      */
     public function __construct($di)
@@ -124,6 +122,11 @@ class TwigWrapper
         $this->_globals[$name] = $value;
     }
 
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
     public function __call($method, $arguments)
     {
         if (!$this->_twig) {
@@ -131,5 +134,4 @@ class TwigWrapper
         }
         return call_user_func_array(array($this->_twig, $method), $arguments);
     }
-
 }

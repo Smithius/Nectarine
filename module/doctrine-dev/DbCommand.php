@@ -49,6 +49,11 @@ class DbCommand extends Db
         $this->exec('SET FOREIGN_KEY_CHECKS = 1');
     }
 
+    /**
+     * @param string $method
+     * @param array $arguments
+     * @return mixed
+     */
     public function __call($method, $arguments)
     {
         $method = $this->driver . ucfirst($method);

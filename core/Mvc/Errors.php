@@ -6,12 +6,8 @@ use Http;
 use Exception;
 use ErrorException;
 
-/**
- * Error class
- */
 class Errors
 {
-
     /**
      * @var \Di
      */
@@ -26,11 +22,11 @@ class Errors
     }
 
     /**
-     * attachment
+     * Sets a error and exception methods to handle errors in a script
      */
     public function register()
     {
-        set_error_handler(array($this, 'handle'));
+        set_error_handler(array($this, 'errorHandle'));
         set_exception_handler(array($this, 'exceptionHandle'));
     }
 
@@ -42,7 +38,7 @@ class Errors
      * @param $errcontext
      * @throws ErrorException
      */
-    public function handle($errno, $errstr, $errfile, $errline, $errcontext)
+    public function errorHandle($errno, $errstr, $errfile, $errline, $errcontext)
     {
         if (!error_reporting())
             return;
@@ -72,6 +68,7 @@ class Errors
                 $twig = $this->di->get('twig');
                 echo $twig->render($viewFile, array('status' => $status));
             } catch (Exception $e) {
+                echo "Exception handler error";
             }
             exit;
         }
@@ -79,5 +76,4 @@ class Errors
         echo "<pre>" . $ex->getTraceAsString() . "</pre>";
         throw $ex;
     }
-
 }

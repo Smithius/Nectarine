@@ -4,7 +4,6 @@ use Di\Container;
 
 class Di
 {
-
     /**
      * @var \Di\Container
      */
@@ -15,6 +14,9 @@ class Di
      */
     protected $definitionSource;
 
+    /**
+     * @param string $source
+     */
     public function __construct($source)
     {
         $this->definitionSource = $source;
@@ -180,6 +182,4 @@ class Di
 
         return $inst;
     }
-
-
 }

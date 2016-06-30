@@ -14,7 +14,8 @@ class DebugParser extends Parser
     protected $type = 'debug';
 
     /**
-     * Load definiton from cache or parse
+     * Try load modules from cache or parse
+     *
      * @param array $dirs
      * @return array
      */
@@ -33,9 +34,10 @@ class DebugParser extends Parser
     }
 
     /**
-     * Load cache for directory or parse
-     * @param $files
-     * @param $dir
+     * Load cache for module or parse
+     *
+     * @param RegexIterator $files
+     * @param string $dir
      * @return array
      */
     private function loadDir($files, $dir)
@@ -63,6 +65,7 @@ class DebugParser extends Parser
 
     /**
      * Parse annotations
+     *
      * @param array $files
      * @param int $dirlen
      * @return array
@@ -82,5 +85,4 @@ class DebugParser extends Parser
 
         return $result;
     }
-
 }

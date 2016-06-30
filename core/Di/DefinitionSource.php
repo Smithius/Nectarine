@@ -33,6 +33,7 @@ class DefinitionSource
 
     /**
      * Returns the DI definition for the entry name.
+     *
      * @param string $className
      * @return array
      */
@@ -41,6 +42,12 @@ class DefinitionSource
         return $this->definitions[$className];
     }
 
+    /**
+     * Return tag definition
+     *
+     * @param string $tagName
+     * @return array
+     */
     public function getTag($tagName)
     {
         return isset($this->tags[$tagName]) ? $this->tags[$tagName] : array();

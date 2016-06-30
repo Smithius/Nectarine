@@ -2,7 +2,6 @@
 
 class Db
 {
-
     /**
      * @Inject
      * @var \Doctrine\ORM\EntityManager
@@ -81,5 +80,4 @@ class Db
         }
         return $r;
     }
-
 }

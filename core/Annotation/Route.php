@@ -4,6 +4,7 @@ namespace Annotation;
 
 /**
  * Marks a controller method as a route
+ *
  * @Annotation
  * @Target({"METHOD"})
  */
@@ -11,18 +12,21 @@ final class Route
 {
     /**
      * Route path, appended to controller path. Defaults to method name.
+     *
      * @var string
      */
     private $path = "";
 
     /**
      * HTTP method for which route is defined
+     *
      * @var array
      */
     private $methods = array('GET');
 
     /**
      * Route name, used to reference route from templates. Defaults to ControllerName::MethodName.
+     *
      * @var string
      */
     private $name = NULL;
@@ -36,7 +40,6 @@ final class Route
     private $parameters = [];
 
     /**
-     * Inject constructor.
      * @param array $values
      */
     public function __construct(array $values)
@@ -88,7 +91,6 @@ final class Route
         $this->path = $path;
         return $this;
     }
-
 
     /**
      * @return array
@@ -143,5 +145,4 @@ final class Route
         $this->parameters = $parameters;
         return $this;
     }
-
 }

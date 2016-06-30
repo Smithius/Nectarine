@@ -8,14 +8,20 @@ class Container
     const CACHE = 1;
     const TRY_CACHE = 2;
 
+    /**
+     * @var array
+     */
     protected $objects = array();
 
+    /**
+     * @var array
+     */
     protected $aliases = array();
 
     /**
-     * Return OBJECTI
+     * Return object if exists
      *
-     * @param $class
+     * @param string $class
      * @param null $ifNull
      * @return null
      */
@@ -27,7 +33,15 @@ class Container
         return array_key_exists($class, $this->objects) ? $this->objects[$class] : $ifNull;
     }
 
-    public function set($object, $parameters, $alias)
+    /**
+     * Store new object
+     *
+     * @param Object $object
+     * @param array|null $parameters
+     * @param string|bool $alias
+     * @return $this
+     */
+    public function set($object, $parameters = null, $alias = false)
     {
         $class = get_class($object);
         $this->objects[$class] = $object;
@@ -38,12 +52,23 @@ class Container
         return $this;
     }
 
+    /**
+     * Add alias to class
+     *
+     * @param Object $class
+     * @param string $alias
+     * @return $this
+     */
     public function setAlias($class, $alias)
     {
         $this->aliases[$alias] = $class;
         return $this;
     }
 
+    /**
+     * @param string $alias
+     * @return Object
+     */
     public function getAlias($alias)
     {
         return $this->aliases[$alias];

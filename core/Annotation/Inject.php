@@ -4,6 +4,7 @@ namespace Annotation;
 
 /**
  * Marks a property as an injection point
+ *
  * @Annotation
  * @Target({"PROPERTY"})
  */
@@ -16,6 +17,7 @@ final class Inject
     public $name;
 
     /**
+     * TODO lazy -> create proxy object
      * @var lazy
      */
     private $lazy = true;
@@ -50,7 +52,9 @@ final class Inject
     }
 
     /**
-     * @return string Name of the entry to inject
+     * Name of the entry to inject
+     *
+     * @return string
      */
     public function getName()
     {

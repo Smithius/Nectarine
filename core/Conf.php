@@ -2,7 +2,6 @@
 
 class Conf
 {
-
     /**
      * @var array config
      */
@@ -13,10 +12,8 @@ class Conf
      */
     public static function init()
     {
-        //  Load default config
         $conf = require ABSPATH . '/config.php';
 
-        //  Add local config
         if (is_file(ABSPATH . '/local.php'))
             $conf = array_merge($conf, require ABSPATH . '/local.php');
         self::$conf = $conf;
@@ -42,5 +39,4 @@ class Conf
     {
         self::$conf[$key] = $val;
     }
-
 }

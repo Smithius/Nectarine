@@ -12,7 +12,8 @@ class Resolver
     protected $fn = array();
 
     /**
-     * Resolve all parametes in array(key => value)
+     * Resolve all parameters in array(key => value) structure
+     *
      * @param array $params
      * @param array $definition
      * @return array
@@ -29,7 +30,8 @@ class Resolver
     }
 
     /**
-     * validate input params
+     * Validate input params
+     *
      * @param mixed $type
      * @param string $param
      * @param mixed $value
@@ -74,6 +76,12 @@ class Resolver
         throw new Error400("{$param}: type $type not found");
     }
 
+    /**
+     * Add custom type resolver
+     *
+     * @param string $name
+     * @param callable $callback
+     */
     public function addExtension($name, $callback)
     {
         $this->fn[$name] = $callback;

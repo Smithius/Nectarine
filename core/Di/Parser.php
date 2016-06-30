@@ -44,7 +44,8 @@ class Parser
     }
 
     /**
-     * Load definiton from cache or parse
+     * Load definition from cache or parse
+     *
      * @param array $dirs
      * @return array
      */
@@ -62,6 +63,7 @@ class Parser
 
     /**
      * Parse annotations
+     *
      * @param array $dirs
      * @return array
      */
@@ -91,6 +93,7 @@ class Parser
     /**
      * @param $className
      * @return array
+     * @todo reorganize to object structure
      */
     protected function parseClass($className)
     {
@@ -138,6 +141,7 @@ class Parser
 
     /**
      * Params parser
+     *
      * @param \ReflectionMethod $method
      * @return array
      */
@@ -168,6 +172,4 @@ class Parser
 
         return $result;
     }
-
 }
-

@@ -12,7 +12,6 @@ class Request
     protected $host;
 
     /**
-     * Route path
      * @var string
      */
     protected $queryPath;
@@ -56,19 +55,22 @@ class Request
     public static function createFromGlobals()
     {
         $uri = $_SERVER ['REQUEST_URI'];
+        $uriQuery = parse_url($uri, PHP_URL_PATH);
+
         $host = Conf::get('nc.site', $_SERVER['HTTP_HOST']);
 
         if (strpos($host, 'http') === false) {
             $host = 'http' . (empty($_SERVER['HTTPS']) ? '' : 's') . '://' . $host;
         }
 
-        $uriPath = parse_url($host, PHP_URL_PATH);
-        $queryPath = preg_replace('$' . $uriPath . '$', "", $uri, 1);
+        $withoutUriPath = parse_url($host, PHP_URL_PATH);
+        $queryPath = preg_replace('$^' . $withoutUriPath . '$', "", $uriQuery, 1);
+
         $method = $_SERVER ['REQUEST_METHOD'];
         $get = isset ($_GET) ? $_GET : null;
         $post = isset ($_POST) ? $_POST : null;
 
-        return new static($host, $queryPath, $method, $get, $post);
+        return new Request($host, $queryPath, $method, $get, $post);
     }
 
     /**
@@ -110,5 +112,4 @@ class Request
     {
         return $this->post;
     }
-
 }

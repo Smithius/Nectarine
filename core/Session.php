@@ -31,6 +31,7 @@ class Session
 
     /**
      * Has field value
+     *
      * @param string $name
      * @return bool
      */
@@ -43,6 +44,7 @@ class Session
 
     /**
      * Get field value
+     *
      * @param string $name
      * @param string $default
      * @param bool $del
@@ -60,6 +62,7 @@ class Session
 
     /**
      * Set field value
+     *
      * @param string $name
      * @param string $value
      * @return mixed
@@ -71,6 +74,7 @@ class Session
 
     /**
      * Clear session
+     *
      * @note userkey is not cleared
      */
     public function clear()
@@ -80,6 +84,7 @@ class Session
 
     /**
      * Update session lifetime
+     *
      * @param int $lifetime
      */
     public function changeLifetime($lifetime)

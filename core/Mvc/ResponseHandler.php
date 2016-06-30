@@ -6,7 +6,6 @@ use Http;
 
 class ResponseHandler
 {
-
     /**
      * @var \Http\Request
      */
@@ -115,6 +114,7 @@ class ResponseHandler
      */
     public function sendResponse()
     {
+        $debug = ob_get_clean();
         foreach ($this->getResponse()->getHeaders() as $name => $value) {
             Http::header($name, $value);
         }
@@ -122,14 +122,16 @@ class ResponseHandler
         Http::header('Content-Type:', $this->getResponse()->getType() . '; charset=utf-8');
         Http::status($this->getResponse()->getStatus());
 
-        if (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
-            header('Content-Encoding: gzip');
-            echo gzencode($this->getResponse()->getBody());
-            return;
+        $body = $this->getResponse()->getBody();
+        if ($debug && DEBUG) {
+            $body = '<pre class="debug_dump">' . $debug . '</pre>' . $body;
         }
 
-        //  header('Content-Encoding: gzip');
-        echo $this->getResponse()->getBody();
-    }
+        if (strpos($_SERVER['HTTP_ACCEPT_ENCODING'], 'gzip') !== false) {
+            header('Content-Encoding: gzip');
+            $body = gzencode($body);
+        }
 
+        echo $body;
+    }
 }

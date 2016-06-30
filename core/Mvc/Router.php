@@ -8,25 +8,26 @@ use Http\Response;
 
 class Router
 {
-
     /**
      * @var \Di
      */
     protected $di;
 
     /**
-     * Routes avaliable
+     * Available routes
      * @var array<Annotation\Route>
      */
     protected $routeCollection;
 
     /**
-     * Mached route
+     * Matched route
      * @var array
      */
     protected $match;
 
-    /** @var \Http\Response */
+    /**
+     * @var \Http\Response
+     */
     protected $response;
 
     /**
@@ -72,7 +73,8 @@ class Router
     }
 
     /**
-     * find route
+     * Find route
+     *
      * @param \Http\Request $request
      * @return array
      * @throws \Error404
@@ -88,7 +90,8 @@ class Router
     }
 
     /**
-     * match url to route
+     * Match url to route
+     *
      * @param string $url
      * @param string $method
      * @return array|boolean
@@ -134,6 +137,7 @@ class Router
 
     /**
      * Dispatch controller
+     *
      * @param ResponseHandler $responseHandler
      * @return \Http\Response
      */
@@ -152,6 +156,7 @@ class Router
 
     /**
      * Call controller action
+     *
      * @param $controller
      * @param array $args
      * @return \Http\Response
@@ -169,6 +174,7 @@ class Router
 
     /**
      * Generate url's for controller
+     *
      * @param string $controller
      * @param array $args
      * @param boolean $escaped
@@ -200,6 +206,7 @@ class Router
 
     /**
      * Return home site URL
+     *
      * @param string $path
      * @return string
      */
@@ -220,10 +227,7 @@ class Router
      */
     public function redirect($controller, array $args = array(), $escaped = true)
     {
-        //TODO
-        // Cookie::destruct();
         Http::header('Location', $this->url($controller, $args, $escaped));
         exit;
     }
-
 }

@@ -24,6 +24,11 @@ class DoctrineInit
         $this->addResolverExtension();
     }
 
+    /**
+     * Create Doctrine Entity Manager
+     *
+     * @throws \Doctrine\ORM\ORMException
+     */
     private function createEntityManager()
     {
         $conn = array(
@@ -48,6 +53,9 @@ class DoctrineInit
         $this->di->set($entityManager, 'em');
     }
 
+    /**
+     * Add resolver extension
+     */
     private function addResolverExtension()
     {
         $this->di->get('resolver')->addExtension('doctrine', function ($type, $value, $param) {

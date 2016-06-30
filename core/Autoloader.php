@@ -2,9 +2,9 @@
 
 class Autoloader
 {
-
     /**
      * Register autolad function
+     *
      * @param boolean $prepend
      */
     public static function register($prepend = false)
@@ -14,6 +14,7 @@ class Autoloader
 
     /**
      * Autolad function
+     *
      * @param string $class class name
      * @return boolean
      */
@@ -30,6 +31,7 @@ class Autoloader
 
     /**
      * Find path to file
+     *
      * @param string $class
      * @return string
      */
@@ -49,5 +51,4 @@ class Autoloader
 
         return false;
     }
-
 }

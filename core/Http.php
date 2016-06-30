@@ -58,7 +58,6 @@ abstract class Http
         }
 
         http_response_code($status);
-        //header('HTTP/1.1 ' . $status . ' ' . self::$HEADER_STATUSES[intval($status)]);
     }
 
     /**

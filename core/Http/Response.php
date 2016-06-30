@@ -174,5 +174,4 @@ class Response
         $this->template = $template;
         return $this;
     }
-
 }
