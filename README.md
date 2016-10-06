@@ -1,24 +1,24 @@
  Nectarine Framework
 ========================================
 
-Instalacja
---------------------
+Installation
+------------
 
-1. Pobrać repo
-2. Zainstalować zależności: "composer install"
-3. Skonfigurować projekt
+1. Download repo
+2. Install dependency: "composer install"
+3. Configure project
 
-Konfiguracja
---------------------
+Configuration
+-------------
 
-Konfiguracja zapisana jest w pliku `config.php` do developmentu można nadpisać plikiem `local.php`
+Main configuration file is named `config.php`. For development purpose it can be overridden by `local.php`.
 
-| Zmienna         | Opis
+| Variable        | Description
 | --------------- | -----
-| db.driver       | Driver PDO
+| db.driver       | PDO Driver
 | db.host         | Host
-| db.name         | Nazwa DB
-| db.user         | Użytkownik
-| db.pass         | Hasło
-| nc.site         | Domyślna strona główna (Opcjonalne)
-| nc.debug        | Tryb debugowania
+| db.name         | Database name
+| db.user         | Database user
+| db.pass         | Database password
+| nc.site         | Site url (Optional)
+| nc.debug        | Debug mode
