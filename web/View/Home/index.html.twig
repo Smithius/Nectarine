@@ -2,37 +2,41 @@
 
 {% block title %} First page {{ parent() }}{% endblock %}
 
-
 {% block content %}
     <div class="col-lg-6">
         <h4>index.html</h4>
         <div class="alert alert-success" role="alert">You are here. Controller code:</div>
-		<pre>
-	/**
-	 * @Route()
-	 */
-	public function index() {
-		return array();
-	}</pre>
+        <pre>
+			/**
+			 * @Route()
+			 */
+			public function index() {
+				return array();
+			}
+		</pre>
     </div>
 
     <div class="col-lg-6">
         <h4>blog.html</h4>
-        <div class="alert alert-info" role="alert">Aby przejść do podstrony blogu wpisz w adresie "/blog", bądź kliknij
-            w przycisk poniżej. Kod kontrolera:
+        <div class="alert alert-info" role="alert">
+            Aby przejść do podstrony blogu wpisz w adresie "/blog", bądź kliknij w przycisk poniżej. Kod kontrolera:
         </div>
-		
-	<pre>
-	/**
-	 * @Route("blog/{id}")
-	 * @param int $id
-	 */
-	public function blog($id) {
-		return array(
-			'id' => $id,
-		);
-	}</pre>
-        <p><a class="btn btn-primary btn-lg" href="{{ url('Home/blog') }}" role="button">Przejdź do drugiej
-                podstrony</a></p>
+
+        <pre>
+			/**
+			 * @Route("blog/{id}")
+			 * @param int $id
+			 */
+			public function blog($id) {
+				return array(
+					'id' => $id,
+				);
+			}
+		</pre>
+        <p>
+            <a class="btn btn-primary btn-lg" href="{{ url('Home/blog') }}">
+                Przejdź do drugiej podstrony
+            </a>
+        </p>
     </div>
 {% endblock %}

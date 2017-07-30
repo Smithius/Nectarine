@@ -3,3 +3,4 @@ core/vendor/
 files/
 .idea/
 local.php
+composer.lock

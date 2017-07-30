@@ -5,18 +5,17 @@ namespace Model;
 /**
  * @Entity
  */
-class Example {
+class Example
+{
+    /**
+     * @Column(type="integer")
+     * @Id
+     * @GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
 
-	/**
-	 * @Column(type="integer")
-	 * @Id
-	 * @GeneratedValue(strategy="AUTO")
-	 */
-	protected $id;
-
-	/**
-	 * @Column(type="integer")
-	 */
-	protected $number;
-
+    /**
+     * @Column(type="integer")
+     */
+    protected $number;
 }
